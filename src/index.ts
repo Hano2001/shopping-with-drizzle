@@ -4,7 +4,7 @@ const port = 3000;
 
 const db = [
   {
-    cartid: "82479462-af95-4b88-bcef-4bf8f4261a4a",
+    cartid: "0",
     cartItems: [
       {
         productId: "3a9f1a05-390e-4109-8072-ac7a1caa7001",
@@ -32,6 +32,17 @@ app.get("/", (req, res) => {
 
 app.get("/api/carts", (req, res) => {
   res.json(db);
+});
+
+app.post("/api/carts", (req, res) => {
+  const newCart = {
+    cartId: db.length.toString(),
+    cartItems: [],
+    totalNumberOfItems: 0,
+    totalPrice: 0,
+  };
+  db.push(newCart);
+  res.json(newCart);
 });
 
 app.listen(port, () => {
