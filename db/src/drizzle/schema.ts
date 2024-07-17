@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { pgTable, text, integer, uuid, decimal } from "drizzle-orm/pg-core";
 
 export const products = pgTable("products", {
@@ -18,3 +19,11 @@ export const cartItems = pgTable("cartItems", {
   productId: uuid("productId").references(() => products.productId),
   quantity: integer("quantity"),
 });
+
+export const cartsRelations = relations(carts, ({ many }) => ({
+  cartItems: many(cartItems),
+}));
+
+export const productsRelations = relations(products, ({ many }) => ({
+  cartItems: many(cartItems),
+}));
