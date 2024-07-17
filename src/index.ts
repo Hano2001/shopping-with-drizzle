@@ -34,14 +34,20 @@ app.get("/api/carts", (req, res) => {
   res.json(db);
 });
 
+app.get("/api/carts/:cartId", (req, res) => {
+  const cart = db.find((c) => c.cartid == req.params.cartId);
+  res.json(cart);
+});
+
 app.post("/api/carts", (req, res) => {
   const newCart = {
-    cartId: db.length.toString(),
+    cartid: db.length.toString(),
     cartItems: [],
     totalNumberOfItems: 0,
     totalPrice: 0,
   };
   db.push(newCart);
+  res.location(`/api/carts/${newCart.cartid}`);
   res.json(newCart);
 });
 
