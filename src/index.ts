@@ -1,4 +1,4 @@
-import express from "express";
+import express, { json } from "express";
 const app = express();
 const port = 3000;
 
@@ -24,8 +24,14 @@ const db = [
   },
 ];
 
+app.use(json());
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
+});
+
+app.get("/api/carts", (req, res) => {
+  res.json(db);
 });
 
 app.listen(port, () => {
