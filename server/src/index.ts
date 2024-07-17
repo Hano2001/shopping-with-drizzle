@@ -36,6 +36,9 @@ app.get("/api/carts", (req, res) => {
 
 app.get("/api/carts/:cartId", (req, res) => {
   const cart = db.find((c) => c.cartid == req.params.cartId);
+  if (!cart) {
+    res.sendStatus(404);
+  }
   res.json(cart);
 });
 
