@@ -65,6 +65,12 @@ app.post("/api/carts/:cartId/products", (req, res) => {
   res.json(cart);
 });
 
+app.delete("/api/carts/:cartId", (req, res) => {
+  const index = db.findIndex((c) => c.cartid == req.params.cartId);
+  db.splice(index, 1);
+  res.send();
+});
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
