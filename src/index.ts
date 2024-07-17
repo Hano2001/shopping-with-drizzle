@@ -46,9 +46,23 @@ app.post("/api/carts", (req, res) => {
     totalNumberOfItems: 0,
     totalPrice: 0,
   };
+
   db.push(newCart);
   res.location(`/api/carts/${newCart.cartid}`);
   res.json(newCart);
+});
+
+app.post("/api/carts/:cartId/products", (req, res) => {
+  const { productId, quantity } = req.body;
+  const cart = db.find((c) => (c.cartid = req.params.cartId));
+  cart?.cartItems.push({
+    productId: productId,
+    name: "Banana",
+    description: "Yellow and bent",
+    price: 1.32,
+    quantity: quantity,
+  });
+  res.json(cart);
 });
 
 app.listen(port, () => {
