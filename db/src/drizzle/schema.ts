@@ -1,5 +1,12 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, integer, uuid, decimal } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  integer,
+  uuid,
+  decimal,
+  primaryKey,
+} from "drizzle-orm/pg-core";
 
 export const products = pgTable("products", {
   productId: uuid("productId").defaultRandom().primaryKey(),
@@ -14,16 +21,37 @@ export const carts = pgTable("carts", {
   totalPrice: decimal("totalPrice"),
 });
 
-export const cartItems = pgTable("cartItems", {
-  cartId: uuid("cartId").references(() => carts.cartId),
-  productId: uuid("productId").references(() => products.productId),
-  quantity: integer("quantity"),
-});
+export const cartProducts = pgTable(
+  "cartProducts",
+  {
+    cartId: uuid("cartId").references(() => carts.cartId),
+    productId: uuid("productId").references(() => products.productId),
+    quantity: integer("quantity"),
+  },
+  (table) => ({
+    primaryKey: [table.cartId, table.productId],
+    // cartProductKey: primaryKey({
+    //   name: "cart_product_key",
+    //   columns: [table.cartId, table.productId],
+    // }),
+  })
+);
 
 export const cartsRelations = relations(carts, ({ many }) => ({
-  cartItems: many(cartItems),
+  cartProducts: many(cartProducts),
 }));
 
 export const productsRelations = relations(products, ({ many }) => ({
-  cartItems: many(cartItems),
+  cartProducts: many(cartProducts),
+}));
+
+export const cartProductsRelations = relations(cartProducts, ({ one }) => ({
+  carts: one(carts, {
+    fields: [cartProducts.cartId],
+    references: [carts.cartId],
+  }),
+  products: one(products, {
+    fields: [cartProducts.productId],
+    references: [products.productId],
+  }),
 }));
