@@ -2,10 +2,30 @@ import express, { json } from "express";
 import { db } from "./drizzle/index.ts";
 import { cartProducts, carts, products } from "./drizzle/schema.ts";
 import { eq } from "drizzle-orm";
+import { faker } from "@faker-js/faker";
 
 const app = express();
 const port = 3000;
 app.use(json());
+
+const createProduct = () => {
+  return {
+    name: faker.commerce.product(),
+    description: faker.commerce.productDescription(),
+    price: faker.commerce.price(),
+  };
+};
+
+const randomProducts = faker.helpers.multiple(createProduct, {
+  count: 15,
+});
+const seed = () => {
+  randomProducts.forEach((product) => {
+    db.insert(products).values(product);
+  });
+};
+
+seed();
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
