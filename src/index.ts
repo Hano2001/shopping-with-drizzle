@@ -1,6 +1,6 @@
 import express, { json } from "express";
 import { db } from "./drizzle/index.ts";
-import { carts } from "./drizzle/schema.ts";
+import { carts, products } from "./drizzle/schema.ts";
 
 const app = express();
 const port = 3000;
@@ -62,16 +62,29 @@ app.post("/api/carts", async (req, res) => {
   res.json(result);
 });
 
+app.post("/api/products", async (req, res) => {
+  type NewProduct = typeof products.$inferInsert;
+  const newProduct: NewProduct = req.body;
+
+  const result = await db.insert(products).values(newProduct).returning();
+  // name: text("name").notNull(),
+  // description: text("description"),
+  // price: decimal("price").notNull(),
+  res.json(result);
+});
 app.post("/api/carts/:cartId/products", (req, res) => {
-  const { productId, quantity } = req.body;
+  const { name, description, price } = req.body;
   const cart = database.find((c) => (c.cartid = req.params.cartId));
   cart?.cartItems.push({
     productId: productId,
     name: "Banana",
     description: "Yellow and bent",
     price: 1.32,
-    quantity: quantity,
   });
+
+  // name: text("name").notNull(),
+  // description: text("description"),
+  // price: decimal("price").notNull(),
   res.json(cart);
 });
 
