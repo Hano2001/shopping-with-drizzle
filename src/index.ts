@@ -1,6 +1,7 @@
 import express, { json } from "express";
 import { db } from "./drizzle/index.ts";
 import { carts, products } from "./drizzle/schema.ts";
+import { eq } from "drizzle-orm";
 
 const app = express();
 const port = 3000;
@@ -67,9 +68,7 @@ app.post("/api/products", async (req, res) => {
   const newProduct: NewProduct = req.body;
 
   const result = await db.insert(products).values(newProduct).returning();
-  // name: text("name").notNull(),
-  // description: text("description"),
-  // price: decimal("price").notNull(),
+
   res.json(result);
 });
 app.post("/api/carts/:cartId/products", (req, res) => {
@@ -82,15 +81,12 @@ app.post("/api/carts/:cartId/products", (req, res) => {
     price: 1.32,
   });
 
-  // name: text("name").notNull(),
-  // description: text("description"),
-  // price: decimal("price").notNull(),
   res.json(cart);
 });
 
-app.delete("/api/carts/:cartId", (req, res) => {
-  const index = database.findIndex((c) => c.cartid == req.params.cartId);
-  database.splice(index, 1);
+app.delete("/api/carts/:cartId", async (req, res) => {
+  const id = req.params.cartId;
+  await db.delete(carts).where(eq(carts.cartId, id));
   res.send();
 });
 
