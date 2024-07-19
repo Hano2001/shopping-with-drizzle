@@ -37,12 +37,17 @@ app.get("/api/carts", async (req, res) => {
   res.json(result);
 });
 
-app.get("/api/carts/:cartId", (req, res) => {
-  const cart = database.find((c) => c.cartid == req.params.cartId);
-  if (!cart) {
+app.get("/api/carts/:cartId", async (req, res) => {
+  const id = req.params.cartId;
+  const result = await db.query.carts.findFirst({
+    where: (carts, { eq }) => eq(carts.cartId, id),
+  });
+
+  if (!result) {
     res.sendStatus(404);
   }
-  res.json(cart);
+
+  res.json(result);
 });
 
 app.post("/api/carts", async (req, res) => {
