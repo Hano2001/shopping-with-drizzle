@@ -1,8 +1,10 @@
 import express, { json } from "express";
+import { db } from "../../db/src/drizzle/index.ts";
+
 const app = express();
 const port = 3000;
 
-const db = [
+const database = [
   {
     cartid: "0",
     cartItems: [
@@ -30,34 +32,34 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/api/carts", (req, res) => {
-  res.json(db);
+app.get("/api/carts", async (req, res) => {
+  const result = await db.query.carts.findMany();
+  res.json(result);
 });
 
 app.get("/api/carts/:cartId", (req, res) => {
-  const cart = db.find((c) => c.cartid == req.params.cartId);
+  const cart = database.find((c) => c.cartid == req.params.cartId);
   if (!cart) {
     res.sendStatus(404);
   }
   res.json(cart);
 });
 
-app.post("/api/carts", (req, res) => {
+app.post("/api/carts", async (req, res) => {
   const newCart = {
-    cartid: db.length.toString(),
+    cartid: database.length.toString(),
     cartItems: [],
     totalNumberOfItems: 0,
     totalPrice: 0,
   };
-
-  db.push(newCart);
+  database.push(newCart);
   res.location(`/api/carts/${newCart.cartid}`);
   res.json(newCart);
 });
 
 app.post("/api/carts/:cartId/products", (req, res) => {
   const { productId, quantity } = req.body;
-  const cart = db.find((c) => (c.cartid = req.params.cartId));
+  const cart = database.find((c) => (c.cartid = req.params.cartId));
   cart?.cartItems.push({
     productId: productId,
     name: "Banana",
@@ -69,8 +71,8 @@ app.post("/api/carts/:cartId/products", (req, res) => {
 });
 
 app.delete("/api/carts/:cartId", (req, res) => {
-  const index = db.findIndex((c) => c.cartid == req.params.cartId);
-  db.splice(index, 1);
+  const index = database.findIndex((c) => c.cartid == req.params.cartId);
+  database.splice(index, 1);
   res.send();
 });
 

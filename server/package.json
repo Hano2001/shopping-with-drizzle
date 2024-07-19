@@ -1,5 +1,6 @@
 {
   "name": "shopping-with-drizzle",
+  "type": "module",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -26,6 +27,7 @@
     "typescript-eslint": "^7.16.1"
   },
   "dependencies": {
+    "drizzle-orm": "^0.32.0",
     "express": "^4.19.2"
   }
 }

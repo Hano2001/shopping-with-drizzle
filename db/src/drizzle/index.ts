@@ -1,7 +1,7 @@
-import { drizzle } from "drizzle-orm/postgres-js";
-import * as schema from "./schema";
-import postgres from "postgres";
 import "dotenv/config";
+import { drizzle } from "drizzle-orm/postgres-js";
+import * as schema from "./schema.ts";
+import postgres from "postgres";
 
 // TODO: move to the top when everything is wrapped in factories.
 
