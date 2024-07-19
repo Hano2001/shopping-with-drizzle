@@ -1,6 +1,6 @@
 import express, { json } from "express";
 import { db } from "./drizzle/index.ts";
-import { carts, products } from "./drizzle/schema.ts";
+import { cartProducts, carts, products } from "./drizzle/schema.ts";
 import { eq } from "drizzle-orm";
 
 const app = express();
@@ -50,7 +50,14 @@ app.post("/api/products", async (req, res) => {
 });
 
 app.post("/api/carts/:cartId/products", async (req, res) => {
-  console.log(res, req);
+  const { cartId } = req.params;
+  const product = req.body;
+  const result = await db.insert(cartProducts).values({
+    cartId: cartId,
+    ...product,
+  });
+
+  res.json(result);
 });
 
 app.delete("/api/carts/:cartId", async (req, res) => {
