@@ -20,12 +20,13 @@ const randomProducts = faker.helpers.multiple(createProduct, {
   count: 15,
 });
 const seed = () => {
-  randomProducts.forEach((product) => {
-    db.insert(products).values(product);
+  randomProducts.forEach(async (product) => {
+    console.log(product);
+    await db.insert(products).values(product);
   });
 };
 
-seed();
+//seed();
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
