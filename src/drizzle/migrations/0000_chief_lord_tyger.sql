@@ -1,20 +1,20 @@
 CREATE TABLE IF NOT EXISTS "cartProducts" (
 	"cartId" uuid,
 	"productId" uuid,
-	"quantity" integer
+	"quantity" integer NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "carts" (
 	"cartId" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"totalNumberOfItems" integer,
-	"totalPrice" numeric
+	"totalNumberOfItems" integer NOT NULL,
+	"totalPrice" numeric NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "products" (
 	"productId" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"name" text,
+	"name" text NOT NULL,
 	"description" text,
-	"price" numeric
+	"price" numeric NOT NULL
 );
 --> statement-breakpoint
 DO $$ BEGIN

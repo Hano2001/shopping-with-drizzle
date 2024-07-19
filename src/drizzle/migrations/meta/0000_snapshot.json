@@ -1,5 +1,5 @@
 {
-  "id": "26731bec-65d8-4edb-a14d-e5ba3d9af0a8",
+  "id": "61531ae4-72b3-401d-a389-c992ba28b96f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -24,7 +24,7 @@
           "name": "quantity",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -74,13 +74,13 @@
           "name": "totalNumberOfItems",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "totalPrice": {
           "name": "totalPrice",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},
@@ -103,7 +103,7 @@
           "name": "name",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "description": {
           "name": "description",
@@ -115,7 +115,7 @@
           "name": "price",
           "type": "numeric",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         }
       },
       "indexes": {},

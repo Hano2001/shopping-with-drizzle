@@ -1,5 +1,6 @@
 import express, { json } from "express";
 import { db } from "./drizzle/index.ts";
+import { carts } from "./drizzle/schema.ts";
 
 const app = express();
 const port = 3000;
@@ -51,15 +52,14 @@ app.get("/api/carts/:cartId", async (req, res) => {
 });
 
 app.post("/api/carts", async (req, res) => {
-  const newCart = {
-    cartid: database.length.toString(),
-    cartItems: [],
+  type NewCart = typeof carts.$inferInsert;
+  const newCart: NewCart = {
     totalNumberOfItems: 0,
-    totalPrice: 0,
+    totalPrice: "0",
   };
-  database.push(newCart);
-  res.location(`/api/carts/${newCart.cartid}`);
-  res.json(newCart);
+  const result = await db.insert(carts).values(newCart).returning();
+  res.location(`/api/carts/${result[0].cartId}`);
+  res.json(result);
 });
 
 app.post("/api/carts/:cartId/products", (req, res) => {
