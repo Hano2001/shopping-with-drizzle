@@ -1,5 +1,5 @@
 import express, { json } from "express";
-import { db } from "../../db/src/drizzle/index.ts";
+import { db } from "./drizzle/index.ts";
 
 const app = express();
 const port = 3000;
